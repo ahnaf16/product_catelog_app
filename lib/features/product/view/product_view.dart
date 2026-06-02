@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:product_catelog_app/features/favorites/controller/favorites_ctrl.dart';
 import 'package:product_catelog_app/features/product/controller/product_ctrl.dart';
 import 'package:product_catelog_app/features/product/view/product_card.dart';
+import 'package:product_catelog_app/features/product/view/product_grid_skeleton.dart';
 import 'package:product_catelog_app/main.export.dart';
 
 class ProductView extends HookConsumerWidget {
@@ -45,22 +46,39 @@ class ProductView extends HookConsumerWidget {
           const Gap(8),
         ],
       ),
-      body: productAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-        error: (error, _) => Center(child: Text(error.toString())),
-        data: (products) {
-          return MasonryGridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            mainAxisSpacing: 24,
-            crossAxisSpacing: 16,
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return ProductCard(product: product, onFavTap: () => favCtrl.toggleFavorite(product));
-            },
-          );
-        },
+      body: RefreshIndicator(
+        onRefresh: productCtrl.reload,
+        child: productAsync.when(
+          loading: () => const ProductGridSkeleton(),
+          error: (error, _) => ContentStateView(
+            icon: Icons.cloud_off_rounded,
+            title: 'Could not load products',
+            message: error.toString(),
+            actionLabel: 'Try again',
+            onActionTap: productCtrl.reload,
+          ),
+          data: (products) {
+            if (products.isEmpty) {
+              return const ContentStateView(
+                icon: Icons.inventory_2_outlined,
+                title: 'No products found',
+                message: 'The catalog is empty right now. Check back in a bit.',
+              );
+            }
+
+            return MasonryGridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              mainAxisSpacing: 24,
+              crossAxisSpacing: 16,
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return ProductCard(product: product, onFavTap: () => favCtrl.toggleFavorite(product));
+              },
+            );
+          },
+        ),
       ),
     );
   }

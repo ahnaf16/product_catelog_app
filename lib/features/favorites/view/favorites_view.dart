@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:product_catelog_app/features/favorites/controller/favorites_ctrl.dart';
+import 'package:product_catelog_app/features/favorites/view/favorites_list_skeleton.dart';
 import 'package:product_catelog_app/features/product/view/product_tile.dart';
 import 'package:product_catelog_app/main.export.dart';
 
@@ -10,6 +11,7 @@ class FavoritesView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritesAsync = ref.watch(favoritesCtrlProvider);
     final favCtrl = useMemoized(() => ref.read(favoritesCtrlProvider.notifier));
+    final hasFavorites = favoritesAsync.asData?.value.isNotEmpty ?? false;
 
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +25,7 @@ class FavoritesView extends HookConsumerWidget {
               foregroundColor: context.colors.error,
               backgroundColor: context.colors.errorContainer,
             ),
-            onPressed: () => favCtrl.clearAll(),
+            onPressed: hasFavorites ? favCtrl.clearAll : null,
             icon: const Icon(LIcons.trash2),
             label: const Text('Clear All'),
           ),
@@ -31,42 +33,39 @@ class FavoritesView extends HookConsumerWidget {
           const Gap(8),
         ],
       ),
-      body: favoritesAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-        error: (error, _) => Center(child: Text(error.toString())),
-        data: (products) {
-          if (products.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.favorite_border_rounded, size: 48, color: context.colors.outline),
-                    const Gap(12),
-                    Text('No favorites yet', style: context.text.titleMedium?.semiBold),
-                    const Gap(4),
-                    Text(
-                      'Save products here to keep them close.',
-                      textAlign: TextAlign.center,
-                      style: context.text.bodyMedium?.textColor(context.colors.onSurfaceVariant),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
+      body: RefreshIndicator(
+        onRefresh: favCtrl.reload,
+        child: favoritesAsync.when(
+          loading: FavoritesListSkeleton.new,
+          error: (error, _) => ContentStateView(
+            icon: Icons.heart_broken_rounded,
+            title: 'Could not load favorites',
+            message: error.toString(),
+            actionLabel: 'Try again',
+            onActionTap: () => ref.invalidate(favoritesCtrlProvider),
+          ),
+          data: (products) {
+            if (products.isEmpty) {
+              return ContentStateView(
+                icon: Icons.favorite_border_rounded,
+                title: 'No favorites yet',
+                message: 'Save products here to keep them close.',
+                actionLabel: 'Browse products',
+                onActionTap: () => RPaths.products.go(context),
+              );
+            }
 
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: products.length,
-            separatorBuilder: (_, _) => const Gap(12),
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return ProductTile(product: product, onFavTap: () => favCtrl.toggleFavorite(product));
-            },
-          );
-        },
+            return ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: products.length,
+              separatorBuilder: (_, _) => const Gap(12),
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return ProductTile(product: product, onFavTap: () => favCtrl.toggleFavorite(product));
+              },
+            );
+          },
+        ),
       ),
     );
   }

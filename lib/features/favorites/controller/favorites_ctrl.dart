@@ -35,6 +35,11 @@ class FavoritesCtrl extends _$FavoritesCtrl {
       return [];
     });
   }
+
+  Future<void> reload() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async => build());
+  }
 }
 
 @Riverpod(keepAlive: true)

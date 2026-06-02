@@ -14,7 +14,7 @@ class ProductCtrl extends _$ProductCtrl {
 
   FutureOr<List<Product>> _inti() async {
     final res = await _repo.getProducts();
-    return res.fold((l) => Toaster.showError(l).andReturn([]), (r) => r);
+    return res.fold(failToErr, (r) => r);
   }
 
   FutureOr<List<Product>> search(String query) async {
