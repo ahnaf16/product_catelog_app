@@ -1,4 +1,3 @@
-import 'package:product_catelog_app/_core/common/toaster.dart';
 import 'package:product_catelog_app/features/product/repository/product_repo.dart';
 import 'package:product_catelog_app/main.export.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -15,7 +14,7 @@ class ProductDetailsCtrl extends _$ProductDetailsCtrl {
 
   FutureOr<Product> _inti() async {
     final res = await _repo.getProduct(id);
-    return res.fold((l) => Toaster.showError(l).andReturn(l.toFuture()), (r) => r);
+    return res.fold(failToErr, (r) => r);
   }
 
   Future<void> reload() async {

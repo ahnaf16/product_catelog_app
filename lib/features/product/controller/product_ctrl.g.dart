@@ -33,7 +33,7 @@ final class ProductCtrlProvider
   ProductCtrl create() => ProductCtrl();
 }
 
-String _$productCtrlHash() => r'8ff507e5d990aceb6ea09ab77c3d335d83ecec1e';
+String _$productCtrlHash() => r'6ca2b7804f11d9db8f98595bfa5aa7f590be3168';
 
 abstract class _$ProductCtrl extends $AsyncNotifier<List<Product>> {
   FutureOr<List<Product>> build();

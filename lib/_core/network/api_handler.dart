@@ -30,15 +30,15 @@ mixin ApiHandler {
 
 extension DioErrorX on DioException {
   Failure toFailure() {
-    // No internet or connection issues
     try {
+      // No internet or connection issues
       if (type == .connectionError || type == .connectionTimeout || type == .unknown) {
-        return const Failure('No internet connection.');
+        return const Failure('No internet connection');
       }
 
       // Timeout
       if (type == .receiveTimeout || type == .sendTimeout) {
-        return const Failure('Connection timed out.');
+        return const Failure('Connection timed out');
       }
 
       final status = response?.statusCode ?? 0;
@@ -48,13 +48,13 @@ extension DioErrorX on DioException {
       if (res case final String s when !s.low.startsWith('<!DOCTYPE html>'.low)) res = jsonDecode(s);
 
       final serverMessage = switch (res) {
-        {'message': final String msg} when msg != 'Validation Error' => msg,
-        {'errorDetails': final Map m} when m.isNotEmpty => null,
+        {'message': final String msg} => msg,
+        {'error': final String msg} => msg,
         _ => null,
       };
 
-      if (serverMessage != null && serverMessage.isNotEmpty) {
-        return Failure(serverMessage, error: this, stackTrace: stackTrace);
+      if (serverMessage.isNotNullOrEmpty) {
+        return Failure(serverMessage!, error: this, stackTrace: stackTrace);
       }
 
       return Failure('Something went wrong. (code $status)', error: this, stackTrace: stackTrace);

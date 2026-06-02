@@ -1,5 +1,4 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:product_catelog_app/main.export.dart';
 
 typedef Report<T> = Either<Failure, T>;
 typedef FutureReport<T> = Future<Report<T>>;
@@ -28,12 +27,4 @@ class Failure {
     final future = Future<T>.error(this, stackTrace);
     return future;
   }
-}
-
-extension DioExceptionTypeEx on DioExceptionType {
-  bool get isTimeout =>
-      this == DioExceptionType.connectionTimeout ||
-      this == DioExceptionType.receiveTimeout ||
-      this == DioExceptionType.connectionError ||
-      this == DioExceptionType.sendTimeout;
 }

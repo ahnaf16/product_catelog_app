@@ -42,7 +42,7 @@ class FavoritesView extends HookConsumerWidget {
             title: 'Could not load favorites',
             message: error.toString(),
             actionLabel: 'Try again',
-            onActionTap: () => ref.invalidate(favoritesCtrlProvider),
+            onActionTap: favCtrl.reload,
           ),
           data: (products) {
             if (products.isEmpty) {

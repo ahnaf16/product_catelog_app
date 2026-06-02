@@ -18,6 +18,8 @@ class ProductCtrl extends _$ProductCtrl {
   }
 
   FutureOr<List<Product>> search(String query) async {
+    if (state.hasError) return [];
+
     final current = await future;
     query = query.low;
 

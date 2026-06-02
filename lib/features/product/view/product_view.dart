@@ -28,7 +28,33 @@ class ProductView extends HookConsumerWidget {
             builder: (context, ctrl) => IconButton(onPressed: ctrl.openView, icon: const Icon(LIcons.search)),
             suggestionsBuilder: (context, ctrl) async {
               final query = ctrl.text.low;
+              if (query.isEmpty) {
+                return const [
+                  SizedBox(
+                    height: 220,
+                    child: ContentStateView(
+                      icon: LIcons.search,
+                      title: 'Search products',
+                      message: 'Type a product name or category to find items quickly.',
+                    ),
+                  ),
+                ];
+              }
+
               final filteredProducts = await productCtrl.search(query);
+              if (filteredProducts.isEmpty) {
+                return const [
+                  SizedBox(
+                    height: 220,
+                    child: ContentStateView(
+                      icon: LIcons.search,
+                      title: 'No matches found',
+                      message: 'Try a different product name or category.',
+                    ),
+                  ),
+                ];
+              }
+
               return filteredProducts.map(
                 (product) => ListTile(
                   leading: CircleAvatar(backgroundColor: Colors.transparent, child: UImage(product.image)),

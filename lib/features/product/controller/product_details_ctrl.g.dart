@@ -51,7 +51,7 @@ final class ProductDetailsCtrlProvider
 }
 
 String _$productDetailsCtrlHash() =>
-    r'ea34eefb2aeac625d6ee33b8f313087e4c990195';
+    r'25f1f89a3e31312ac0eb4c928ceb0a62409e9d94';
 
 final class ProductDetailsCtrlFamily extends $Family
     with

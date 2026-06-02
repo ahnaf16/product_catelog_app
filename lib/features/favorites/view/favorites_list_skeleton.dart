@@ -17,9 +17,7 @@ class FavoritesListSkeleton extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           decoration: ShapeDecoration(
             color: context.colors.surfaceContainerLow,
-            shape: RoundedSuperellipseBorder(
-              borderRadius: BorderRadius.circular(28),
-            ),
+            shape: RoundedSuperellipseBorder(borderRadius: BorderRadius.circular(28)),
           ),
           child: const Row(
             children: [
@@ -27,7 +25,7 @@ class FavoritesListSkeleton extends StatelessWidget {
               Gap(14),
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: .start,
                   children: [
                     SkeletonBox(height: 10, width: 76, borderRadius: 999),
                     Gap(10),
@@ -39,13 +37,7 @@ class FavoritesListSkeleton extends StatelessWidget {
                     Gap(6),
                     SkeletonBox(height: 14, width: 180),
                     Gap(14),
-                    Row(
-                      children: [
-                        SkeletonBox(height: 18, width: 78),
-                        Spacer(),
-                        SkeletonBox(height: 18, width: 54),
-                      ],
-                    ),
+                    Row(children: [SkeletonBox(height: 18, width: 78), Spacer(), SkeletonBox(height: 18, width: 54)]),
                   ],
                 ),
               ),

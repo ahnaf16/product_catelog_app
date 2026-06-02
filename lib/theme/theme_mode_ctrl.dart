@@ -20,7 +20,12 @@ class ThemeModeCtrl extends _$ThemeModeCtrl {
   }
 
   Future<void> toggle() async {
-    state = state == .light ? .dark : .light;
-    await _repo.updateConfig(AppConfig(isLightMode: state == .light));
+    await setThemeMode(state == .light ? .dark : .light);
+  }
+
+  Future<void> setThemeMode(ThemeMode mode) async {
+    if (state == mode) return;
+    state = mode;
+    await _repo.updateConfig(AppConfig(isLightMode: mode == .light));
   }
 }

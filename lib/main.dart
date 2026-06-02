@@ -13,7 +13,7 @@ void main() async {
 
   await initDependencies();
 
-  runApp(const ProviderScope(child: _APP()));
+  runApp(ProviderScope(retry: (retryCount, error) => null, child: const _APP()));
 }
 
 class _APP extends ConsumerWidget {

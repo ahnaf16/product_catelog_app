@@ -11,7 +11,7 @@ class NavigationRoot extends HookConsumerWidget {
     final Map<RPath, _NavDest> destinations = {
       RPaths.products: const _NavDest(icon: LIcons.shoppingBag, text: 'Home'),
       RPaths.favorites: const _NavDest(icon: LIcons.heart, text: 'Favorites'),
-      RPaths.config: const _NavDest(icon: LIcons.cog, text: 'Config'),
+      RPaths.config: const _NavDest(icon: LIcons.cog, text: 'Settings'),
     };
 
     final getIndex = destinations.keys.map((e) => e.name).toList().indexOf(rootPath);
