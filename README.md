@@ -29,6 +29,31 @@ flutter run
 flutter analyze
 ```
 
+## CI/CD Release Process
+
+GitHub Actions builds and publishes the Android release APK automatically after code is merged into the `main` branch.
+
+The workflow runs these steps:
+
+1. Install Java 17 and Flutter stable.
+2. Install Flutter dependencies.
+3. Generate source files with `build_runner`.
+4. Run static analysis.
+5. Run tests when a `test/` directory exists.
+6. Build the release APK.
+7. Create a GitHub Release with the APK attached.
+
+Normal release flow:
+
+1. Create or switch to a feature branch.
+2. Commit and push changes with GitHub Desktop.
+3. Open a pull request into `main` on GitHub.
+4. Merge the pull request after review.
+5. Wait for the GitHub Actions workflow to finish.
+6. Download the APK from the repository's Releases page.
+
+The workflow can also be started manually from the Actions tab with `workflow_dispatch`.
+
 ## Architecture Explanation
 
 The app uses a feature-based structure under `lib/features`.
