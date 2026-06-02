@@ -1,7 +1,8 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:universal_image/universal_image.dart';
 
 class UImage extends StatelessWidget {
   const UImage(
@@ -28,7 +29,6 @@ class UImage extends StatelessWidget {
   /// - `assets file path` (assets path must start with `assets`),
   /// - `local file path`
   /// - `icon data`
-  /// - `Base64 string`
   /// - `Uint8List`
   final Object src;
 
@@ -59,12 +59,6 @@ class UImage extends StatelessWidget {
 
     final double? h = dimension ?? height;
     final double? w = dimension ?? width;
-    final size = iconSize ?? 20;
-
-    dynamic source = src;
-
-    if (src case final File file) source = file.path;
-
     return InkWell(
       borderRadius: radius,
       hoverColor: Colors.transparent,
@@ -85,17 +79,117 @@ class UImage extends StatelessWidget {
         ),
         padding: padding,
         clipBehavior: Clip.hardEdge,
-        child: UniversalImage(
-          source,
-          width: w,
+        child: _ImageContent(
+          src: src,
           height: h,
-          size: size,
+          width: w,
           fit: fit,
+          iconSize: iconSize,
           color: color,
-          placeholder: const Center(child: SizedBox.square(dimension: 20, child: CircularProgressIndicator())),
-          errorPlaceholder: const Center(child: Icon(Icons.hide_image_outlined)),
+          colorBlendMode: colorBlendMode,
         ),
       ),
     );
+  }
+}
+
+class _ImageContent extends StatelessWidget {
+  const _ImageContent({
+    required this.src,
+    required this.height,
+    required this.width,
+    required this.fit,
+    required this.iconSize,
+    required this.color,
+    required this.colorBlendMode,
+  });
+
+  final Object src;
+  final double? height;
+  final double? width;
+  final BoxFit fit;
+  final double? iconSize;
+  final Color? color;
+  final BlendMode? colorBlendMode;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = iconSize ?? 20;
+
+    return switch (src) {
+      final String value when _isNetworkUrl(value) => CachedNetworkImage(
+        imageUrl: value,
+        height: height,
+        width: width,
+        fit: fit,
+        color: color,
+        colorBlendMode: colorBlendMode,
+        placeholder: (_, _) => const _ImagePlaceholder(),
+        errorWidget: (_, _, _) => const _ImageError(),
+      ),
+      final String value when value.startsWith('assets') => Image.asset(
+        value,
+        height: height,
+        width: width,
+        fit: fit,
+        color: color,
+        colorBlendMode: colorBlendMode,
+        errorBuilder: (_, _, _) => const _ImageError(),
+      ),
+      final String value => Image.file(
+        File(value),
+        height: height,
+        width: width,
+        fit: fit,
+        color: color,
+        colorBlendMode: colorBlendMode,
+        errorBuilder: (_, _, _) => const _ImageError(),
+      ),
+      final File value => Image.file(
+        value,
+        height: height,
+        width: width,
+        fit: fit,
+        color: color,
+        colorBlendMode: colorBlendMode,
+        errorBuilder: (_, _, _) => const _ImageError(),
+      ),
+      final Uint8List value => Image.memory(
+        value,
+        height: height,
+        width: width,
+        fit: fit,
+        color: color,
+        colorBlendMode: colorBlendMode,
+        errorBuilder: (_, _, _) => const _ImageError(),
+      ),
+      final IconData value => Center(
+        child: Icon(value, size: size, color: color),
+      ),
+      _ => const _ImageError(),
+    };
+  }
+
+  bool _isNetworkUrl(String value) {
+    final uri = Uri.tryParse(value);
+    return uri != null && (uri.scheme == 'http' || uri.scheme == 'https');
+  }
+}
+
+class _ImagePlaceholder extends StatelessWidget {
+  const _ImagePlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: SizedBox.square(dimension: 20, child: CircularProgressIndicator()));
+  }
+}
+
+class _ImageError extends StatelessWidget {
+  const _ImageError();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Icon(Icons.hide_image_outlined));
   }
 }

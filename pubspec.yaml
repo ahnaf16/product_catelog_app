@@ -25,12 +25,12 @@ dependencies:
   dart_mappable: ^4.8.0
   dio: ^5.9.2
   fpdart: ^1.2.0
-  intl: ^0.20.2
-  universal_image: ^1.0.12
+  cached_network_image: ^3.4.1
   hive_ce: ^2.19.3
   hive_ce_flutter: ^2.3.4
   toastification: ^3.2.0
   flutter_staggered_grid_view: ^0.7.0
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -46,4 +46,3 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
-
