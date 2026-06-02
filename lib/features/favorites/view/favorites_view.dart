@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:product_catelog_app/features/favorites/controller/favorites_ctrl.dart';
 import 'package:product_catelog_app/features/favorites/view/favorites_list_skeleton.dart';
-import 'package:product_catelog_app/features/product/view/product_tile.dart';
+import 'package:product_catelog_app/features/product/view/local/product_tile.dart';
 import 'package:product_catelog_app/main.export.dart';
 
 class FavoritesView extends HookConsumerWidget {
@@ -13,10 +13,7 @@ class FavoritesView extends HookConsumerWidget {
     final favCtrl = useMemoized(() => ref.read(favoritesCtrlProvider.notifier));
     final hasFavorites = favoritesAsync.asData?.value.isNotEmpty ?? false;
     final isTablet = context.isTablet;
-    final listPadding = EdgeInsets.symmetric(
-      horizontal: isTablet ? 24 : 16,
-      vertical: 16,
-    );
+    final listPadding = EdgeInsets.symmetric(horizontal: isTablet ? 24 : 16, vertical: 16);
     final maxContentWidth = context.isLargeTablet ? 1040.0 : 920.0;
 
     return Scaffold(
@@ -24,10 +21,7 @@ class FavoritesView extends HookConsumerWidget {
         scrolledUnderElevation: 0,
         elevation: 0,
         backgroundColor: context.colors.surface,
-        title: Text(
-          'Favorites',
-          style: context.text.titleLarge?.bold.letterSpace(1),
-        ),
+        title: Text('Favorites', style: context.text.titleLarge?.bold.letterSpace(1)),
         actions: [
           TextButton.icon(
             style: IconButton.styleFrom(
@@ -74,10 +68,7 @@ class FavoritesView extends HookConsumerWidget {
                   separatorBuilder: (_, _) => Gap(isTablet ? 16 : 12),
                   itemBuilder: (context, index) {
                     final product = products[index];
-                    return ProductTile(
-                      product: product,
-                      onFavTap: () => favCtrl.toggleFavorite(product),
-                    );
+                    return ProductTile(product: product, onFavTap: () => favCtrl.toggleFavorite(product));
                   },
                 ),
               ),

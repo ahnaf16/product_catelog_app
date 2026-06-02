@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:product_catelog_app/features/favorites/controller/favorites_ctrl.dart';
 import 'package:product_catelog_app/features/product/controller/product_ctrl.dart';
-import 'package:product_catelog_app/features/product/view/product_card.dart';
+import 'package:product_catelog_app/features/product/view/local/product_card.dart';
 import 'package:product_catelog_app/features/product/view/product_grid_skeleton.dart';
 import 'package:product_catelog_app/main.export.dart';
 
