@@ -6,13 +6,19 @@ class ProductDetailsSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = context.isTablet;
+    final headerHeight = isTablet ? 480.0 : 400.0;
+    final heroPadding = isTablet ? 56.0 : 40.0;
+    final bodyPadding = isTablet ? 32.0 : 24.0;
+    final maxBodyWidth = context.isLargeTablet ? 980.0 : 860.0;
+
     return CustomScrollView(
       slivers: [
         SliverAppBar(
           scrolledUnderElevation: 0,
           elevation: 0,
           backgroundColor: context.colors.surface,
-          expandedHeight: 400,
+          expandedHeight: headerHeight,
           pinned: true,
           stretch: true,
           leadingWidth: 70,
@@ -28,10 +34,10 @@ class ProductDetailsSkeleton extends StatelessWidget {
               child: SkeletonBox(height: 40, width: 40, borderRadius: 999),
             ),
           ],
-          flexibleSpace: const FlexibleSpaceBar(
+          flexibleSpace: FlexibleSpaceBar(
             background: Padding(
-              padding: EdgeInsets.all(40),
-              child: Center(child: SkeletonBox(borderRadius: 32)),
+              padding: EdgeInsets.all(heroPadding),
+              child: const Center(child: SkeletonBox(borderRadius: 32)),
             ),
           ),
         ),
@@ -43,43 +49,55 @@ class ProductDetailsSkeleton extends StatelessWidget {
                 top: Radius.circular(32),
               ),
             ),
-            padding: const EdgeInsets.all(24),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    SkeletonBox(height: 32, width: 96, borderRadius: 12),
-                    Spacer(),
-                    SkeletonBox(height: 20, width: 110, borderRadius: 999),
-                  ],
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxBodyWidth),
+                child: Padding(
+                  padding: EdgeInsets.all(bodyPadding),
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          SkeletonBox(height: 32, width: 96, borderRadius: 12),
+                          Spacer(),
+                          SkeletonBox(
+                            height: 20,
+                            width: 110,
+                            borderRadius: 999,
+                          ),
+                        ],
+                      ),
+                      Gap(18),
+                      SkeletonBox(
+                        height: 34,
+                        width: double.infinity,
+                        borderRadius: 14,
+                      ),
+                      Gap(10),
+                      SkeletonBox(height: 34, width: 120, borderRadius: 14),
+                      Gap(32),
+                      SkeletonBox(height: 20, width: 110, borderRadius: 12),
+                      Gap(12),
+                      SkeletonBox(
+                        height: 16,
+                        width: double.infinity,
+                        borderRadius: 10,
+                      ),
+                      Gap(8),
+                      SkeletonBox(
+                        height: 16,
+                        width: double.infinity,
+                        borderRadius: 10,
+                      ),
+                      Gap(8),
+                      SkeletonBox(height: 16, width: 240, borderRadius: 10),
+                      Gap(150),
+                    ],
+                  ),
                 ),
-                Gap(18),
-                SkeletonBox(
-                  height: 34,
-                  width: double.infinity,
-                  borderRadius: 14,
-                ),
-                Gap(10),
-                SkeletonBox(height: 34, width: 120, borderRadius: 14),
-                Gap(32),
-                SkeletonBox(height: 20, width: 110, borderRadius: 12),
-                Gap(12),
-                SkeletonBox(
-                  height: 16,
-                  width: double.infinity,
-                  borderRadius: 10,
-                ),
-                Gap(8),
-                SkeletonBox(
-                  height: 16,
-                  width: double.infinity,
-                  borderRadius: 10,
-                ),
-                Gap(8),
-                SkeletonBox(height: 16, width: 240, borderRadius: 10),
-                Gap(150),
-              ],
+              ),
             ),
           ),
         ),

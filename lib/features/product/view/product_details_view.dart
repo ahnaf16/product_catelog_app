@@ -15,6 +15,11 @@ class ProductDetailsView extends HookConsumerWidget {
     final detailsCtrl = useMemoized(() => ref.read(productDetailsCtrlProvider(id).notifier), [id]);
     final favCtrl = useMemoized(() => ref.read(favoritesCtrlProvider.notifier));
     final isFev = ref.watch(isProductFavoriteProvider(id)).value ?? false;
+    final isTablet = context.isTablet;
+    final headerHeight = isTablet ? 480.0 : 400.0;
+    final heroPadding = isTablet ? 56.0 : 40.0;
+    final bodyPadding = isTablet ? 32.0 : 24.0;
+    final maxBodyWidth = context.isLargeTablet ? 980.0 : 860.0;
 
     return RefreshIndicator(
       onRefresh: detailsCtrl.reload,
@@ -37,7 +42,7 @@ class ProductDetailsView extends HookConsumerWidget {
                   scrolledUnderElevation: 0,
                   elevation: 0,
                   backgroundColor: context.colors.surface,
-                  expandedHeight: 400,
+                  expandedHeight: headerHeight,
                   pinned: true,
                   stretch: true,
                   leadingWidth: 70,
@@ -54,7 +59,7 @@ class ProductDetailsView extends HookConsumerWidget {
 
                   flexibleSpace: FlexibleSpaceBar(
                     background: Container(
-                      padding: const EdgeInsets.all(40),
+                      padding: EdgeInsets.all(heroPadding),
                       child: Hero(
                         tag: 'product-${product.id}',
                         child: Material(
@@ -72,50 +77,64 @@ class ProductDetailsView extends HookConsumerWidget {
                       color: context.colors.onPrimary.op(context.isDark ? .6 : 1),
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
                     ),
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: .spaceBetween,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              decoration: BoxDecoration(
-                                color: context.colors.primaryContainer.op(0.4),
-                                borderRadius: BorderRadius.circular(10),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxBodyWidth),
+                        child: Padding(
+                          padding: EdgeInsets.all(bodyPadding),
+                          child: Column(
+                            crossAxisAlignment: .start,
+                            children: [
+                              Wrap(
+                                alignment: WrapAlignment.spaceBetween,
+                                runSpacing: 12,
+                                spacing: 12,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: context.colors.primaryContainer.op(0.4),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      product.category.toUpperCase(),
+                                      style: context.text.labelMedium?.bold.textColor(context.colors.primary),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisSize: .min,
+                                    children: [
+                                      const Icon(Icons.star_rounded, color: Colors.amber, size: 20),
+                                      Text(
+                                        ' ${product.rating.rate} ',
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('(${product.rating.count} reviews)', style: context.text.bodySmall),
+                                    ],
+                                  ),
+                                ],
                               ),
-                              child: Text(
-                                product.category.toUpperCase(),
-                                style: context.text.labelMedium?.bold.textColor(context.colors.primary),
+                              const Gap(16),
+                              Text(product.title, style: context.text.headlineSmall?.bold.textHeight(1.2)),
+                              const Gap(8),
+                              Text(
+                                product.price.currency(),
+                                style: context.text.headlineSmall?.bold.textColor(context.colors.primary),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                const Icon(Icons.star_rounded, color: Colors.amber, size: 20),
-                                Text(' ${product.rating.rate} ', style: const TextStyle(fontWeight: FontWeight.bold)),
-                                Text('(${product.rating.count} reviews)', style: context.text.bodySmall),
-                              ],
-                            ),
-                          ],
+                              const Divider(height: 32),
+                              Text(
+                                'Description',
+                                style: context.text.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              const Gap(8),
+                              Text(product.description, style: context.text.bodyLarge?.textHeight(1.5).op(.7)),
+                              const Gap(150),
+                            ],
+                          ),
                         ),
-
-                        const Gap(16),
-                        Text(product.title, style: context.text.headlineSmall?.bold.textHeight(1.2)),
-                        const Gap(8),
-                        Text(
-                          product.price.currency(),
-                          style: context.text.headlineSmall?.bold.textColor(context.colors.primary),
-                        ),
-
-                        const Divider(height: 32),
-
-                        Text('Description', style: context.text.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-                        const Gap(8),
-                        Text(product.description, style: context.text.bodyLarge?.textHeight(1.5).op(.7)),
-
-                        const Gap(150),
-                      ],
+                      ),
                     ),
                   ),
                 ),

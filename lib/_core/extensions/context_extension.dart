@@ -21,8 +21,14 @@ extension RouteEx on BuildContext {
 
   Future<T?> nPush<T extends Object?>(Widget page, {bool? fullScreen}) {
     final route = isIos
-        ? CupertinoPageRoute<T>(builder: (c) => page, fullscreenDialog: fullScreen ?? false)
-        : MaterialPageRoute<T>(builder: (c) => page, fullscreenDialog: fullScreen ?? false);
+        ? CupertinoPageRoute<T>(
+            builder: (c) => page,
+            fullscreenDialog: fullScreen ?? false,
+          )
+        : MaterialPageRoute<T>(
+            builder: (c) => page,
+            fullscreenDialog: fullScreen ?? false,
+          );
 
     return Navigator.of(this).push<T>(route);
   }
@@ -45,6 +51,8 @@ extension ContextEx on BuildContext {
   Size get size => MediaQuery.sizeOf(this);
   double get height => size.height;
   double get width => size.width;
+  bool get isTablet => width >= 700;
+  bool get isLargeTablet => width >= 1000;
 
   ThemeData get theme => Theme.of(this);
   CupertinoThemeData get themeCup => CupertinoTheme.of(this);

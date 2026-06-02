@@ -9,38 +9,62 @@ class ProductGridSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MasonryGridView.builder(
-      padding: const EdgeInsets.all(16),
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      mainAxisSpacing: 24,
-      crossAxisSpacing: 16,
-      itemCount: itemCount,
-      itemBuilder: (context, index) {
-        const imageHeight = 172.0;
-        return Container(
-          decoration: ShapeDecoration(
-            color: context.colors.primary.op1,
-            shape: const RoundedSuperellipseBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26), bottom: Radius.circular(18)),
-            ),
+    final isTablet = context.isTablet;
+    final maxContentWidth = context.isLargeTablet ? 1280.0 : 1080.0;
+    final crossAxisCount = context.isLargeTablet
+        ? 4
+        : isTablet
+        ? 3
+        : 2;
+    final gridPadding = EdgeInsets.symmetric(
+      horizontal: isTablet ? 24 : 16,
+      vertical: 16,
+    );
+    final gridSpacing = isTablet ? 20.0 : 16.0;
+
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxContentWidth),
+        child: MasonryGridView.builder(
+          padding: gridPadding,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
           ),
-          child: const Padding(
-            padding: EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: .start,
-              spacing: 8,
-              children: [
-                SkeletonBox(height: imageHeight, borderRadius: 24),
-                Gap(6),
-                SkeletonBox(height: 10, width: 72, borderRadius: 999),
-                SkeletonBox(height: 18, width: 132),
-                SkeletonBox(height: 16, width: 84),
-              ],
-            ),
-          ),
-        );
-      },
+          mainAxisSpacing: gridSpacing + 8,
+          crossAxisSpacing: gridSpacing,
+          itemCount: itemCount,
+          itemBuilder: (context, index) {
+            const imageHeight = 172.0;
+            return Container(
+              decoration: ShapeDecoration(
+                color: context.colors.primary.op1,
+                shape: const RoundedSuperellipseBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(26),
+                    bottom: Radius.circular(18),
+                  ),
+                ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: .start,
+                  spacing: 8,
+                  children: [
+                    SkeletonBox(height: imageHeight, borderRadius: 24),
+                    Gap(6),
+                    SkeletonBox(height: 10, width: 72, borderRadius: 999),
+                    SkeletonBox(height: 18, width: 132),
+                    SkeletonBox(height: 16, width: 84),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

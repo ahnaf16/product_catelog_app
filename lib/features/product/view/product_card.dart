@@ -11,87 +11,114 @@ class ProductCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFev = ref.watch(isProductFavoriteProvider(product.id.toString())).value ?? false;
+    final isFev =
+        ref.watch(isProductFavoriteProvider(product.id.toString())).value ??
+        false;
 
-    return GestureDetector(
-      onTap: () => RPaths.productDetails(product.id.toString()).push(context),
-      child: Container(
-        decoration: ShapeDecoration(
-          color: context.colors.primary.op1,
-          shape: const RoundedSuperellipseBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(26), bottom: Radius.circular(18)),
-          ),
-        ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardWidth = constraints.maxWidth;
+        final imageHeight = cardWidth >= 240 ? 220.0 : 180.0;
+        final contentPadding = cardWidth >= 240 ? 14.0 : 12.0;
 
-        child: Column(
-          crossAxisAlignment: .start,
-          children: [
-            Stack(
-              children: [
-                Hero(
-                  tag: 'product-${product.id}',
-                  child: Material(
-                    type: .transparency,
-                    child: UImage(
-                      product.image,
-                      fit: BoxFit.contain,
-                      height: 200,
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(20),
-                      backgroundColor: context.colors.onPrimary.op(context.isDark ? .4 : 1),
-                      borderRadius: 26,
-                    ),
-                  ),
+        return GestureDetector(
+          onTap: () =>
+              RPaths.productDetails(product.id.toString()).push(context),
+          child: Container(
+            decoration: ShapeDecoration(
+              color: context.colors.primary.op1,
+              shape: const RoundedSuperellipseBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(26),
+                  bottom: Radius.circular(18),
                 ),
-
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: FavoriteButton(isFav: isFev, onTap: onFavTap),
-                ),
-              ],
+              ),
             ),
-            const Gap(12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12).copyWith(bottom: 12),
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Row(
-                    mainAxisAlignment: .spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          product.category.toUpperCase(),
-                          style: context.text.labelSmall?.bold.letterSpace(1).textColor(context.colors.primary.op(0.7)),
+            child: Column(
+              crossAxisAlignment: .start,
+              children: [
+                Stack(
+                  children: [
+                    Hero(
+                      tag: 'product-${product.id}',
+                      child: Material(
+                        type: .transparency,
+                        child: UImage(
+                          product.image,
+                          fit: BoxFit.contain,
+                          height: imageHeight,
+                          width: double.infinity,
+                          padding: EdgeInsets.all(cardWidth >= 240 ? 24 : 20),
+                          backgroundColor: context.colors.onPrimary.op(
+                            context.isDark ? .4 : 1,
+                          ),
+                          borderRadius: 26,
                         ),
                       ),
+                    ),
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: FavoriteButton(isFav: isFev, onTap: onFavTap),
+                    ),
+                  ],
+                ),
+                const Gap(12),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: contentPadding,
+                  ).copyWith(bottom: contentPadding),
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    children: [
                       Row(
+                        mainAxisAlignment: .spaceBetween,
                         children: [
-                          const Icon(Icons.star_rounded, color: Colors.amber, size: 14),
-                          Text(' ${product.rating.rate}', style: context.text.labelSmall?.bold),
+                          Expanded(
+                            child: Text(
+                              product.category.toUpperCase(),
+                              style: context.text.labelSmall?.bold
+                                  .letterSpace(1)
+                                  .textColor(context.colors.primary.op(0.7)),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star_rounded,
+                                color: Colors.amber,
+                                size: 14,
+                              ),
+                              Text(
+                                ' ${product.rating.rate}',
+                                style: context.text.labelSmall?.bold,
+                              ),
+                            ],
+                          ),
                         ],
+                      ),
+                      const Gap(4),
+                      Text(
+                        product.title,
+                        maxLines: cardWidth >= 240 ? 2 : 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.text.titleMedium?.semiBold,
+                      ),
+                      const Gap(2),
+                      Text(
+                        product.price.currency(),
+                        style: context.text.bodyLarge?.black.textColor(
+                          context.colors.onSurface,
+                        ),
                       ),
                     ],
                   ),
-                  const Gap(4),
-                  Text(
-                    product.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.text.titleMedium?.semiBold,
-                  ),
-                  const Gap(2),
-                  Text(
-                    product.price.currency(),
-                    style: context.text.bodyLarge?.black.textColor(context.colors.onSurface),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

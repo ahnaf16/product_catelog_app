@@ -14,6 +14,15 @@ class ProductView extends HookConsumerWidget {
     final productAsync = ref.watch(productCtrlProvider);
     final productCtrl = useMemoized(() => ref.read(productCtrlProvider.notifier));
     final favCtrl = useMemoized(() => ref.read(favoritesCtrlProvider.notifier));
+    final isTablet = context.isTablet;
+    final maxContentWidth = context.isLargeTablet ? 1280.0 : 1080.0;
+    final crossAxisCount = context.isLargeTablet
+        ? 4
+        : isTablet
+        ? 3
+        : 2;
+    final gridPadding = EdgeInsets.symmetric(horizontal: isTablet ? 24 : 16, vertical: 16);
+    final gridSpacing = isTablet ? 20.0 : 16.0;
 
     return Scaffold(
       appBar: AppBar(
@@ -25,6 +34,7 @@ class ProductView extends HookConsumerWidget {
           SearchAnchor(
             viewHintText: 'Search by name or category',
             dividerColor: context.colors.outlineVariant,
+            isFullScreen: !context.isTablet,
             builder: (context, ctrl) => IconButton(onPressed: ctrl.openView, icon: const Icon(LIcons.search)),
             suggestionsBuilder: (context, ctrl) async {
               final query = ctrl.text.low;
@@ -92,16 +102,22 @@ class ProductView extends HookConsumerWidget {
               );
             }
 
-            return MasonryGridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-              mainAxisSpacing: 24,
-              crossAxisSpacing: 16,
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return ProductCard(product: product, onFavTap: () => favCtrl.toggleFavorite(product));
-              },
+            return Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: MasonryGridView.builder(
+                  padding: gridPadding,
+                  gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount),
+                  mainAxisSpacing: gridSpacing + 8,
+                  crossAxisSpacing: gridSpacing,
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    final product = products[index];
+                    return ProductCard(product: product, onFavTap: () => favCtrl.toggleFavorite(product));
+                  },
+                ),
+              ),
             );
           },
         ),

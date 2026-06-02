@@ -10,6 +10,8 @@ class AppConfigView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeCtrlProvider);
     final themeCtrl = useMemoized(() => ref.read(themeModeCtrlProvider.notifier));
+    final isTablet = context.isTablet;
+    final maxContentWidth = context.isLargeTablet ? 980.0 : 860.0;
 
     return Scaffold(
       appBar: AppBar(
@@ -19,43 +21,50 @@ class AppConfigView extends HookConsumerWidget {
         title: Text('Settings', style: context.text.titleLarge?.bold.letterSpace(1)),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Appearance', style: context.text.titleMedium?.semiBold.textColor(context.colors.onSurface)),
-            const Gap(6),
-            Text(
-              'Choose how the app looks to you.',
-              style: context.text.bodyMedium?.textColor(context.colors.onSurfaceVariant),
-            ),
-            const Gap(16),
-            Row(
+        padding: EdgeInsets.fromLTRB(isTablet ? 24 : 20, 12, isTablet ? 24 : 20, 24),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxContentWidth),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: ThemeOptionCard(
-                    title: 'Light',
-                    subtitle: 'Bright and crisp',
-                    icon: Icons.wb_sunny_outlined,
-                    selected: themeMode == ThemeMode.light,
-                    previewMode: ThemeMode.light,
-                    onTap: () => themeCtrl.setThemeMode(.light),
-                  ),
+                Text('Appearance', style: context.text.titleMedium?.semiBold.textColor(context.colors.onSurface)),
+                const Gap(6),
+                Text(
+                  'Choose how the app looks to you.',
+                  style: context.text.bodyMedium?.textColor(context.colors.onSurfaceVariant),
                 ),
-                const Gap(12),
-                Expanded(
-                  child: ThemeOptionCard(
-                    title: 'Dark',
-                    subtitle: 'Soft and focused',
-                    icon: Icons.nights_stay_outlined,
-                    selected: themeMode == ThemeMode.dark,
-                    previewMode: ThemeMode.dark,
-                    onTap: () => themeCtrl.setThemeMode(.dark),
-                  ),
+                const Gap(16),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: ThemeOptionCard(
+                        title: 'Light',
+                        subtitle: 'Bright and crisp',
+                        icon: Icons.wb_sunny_outlined,
+                        selected: themeMode == ThemeMode.light,
+                        previewMode: ThemeMode.light,
+                        onTap: () => themeCtrl.setThemeMode(.light),
+                      ),
+                    ),
+                    const Gap(12),
+                    Expanded(
+                      child: ThemeOptionCard(
+                        title: 'Dark',
+                        subtitle: 'Soft and focused',
+                        icon: Icons.nights_stay_outlined,
+                        selected: themeMode == ThemeMode.dark,
+                        previewMode: ThemeMode.dark,
+                        onTap: () => themeCtrl.setThemeMode(.dark),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
