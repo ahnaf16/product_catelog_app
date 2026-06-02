@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:product_catelog_app/_widgets/u_image.dart';
 import 'package:product_catelog_app/features/favorites/controller/favorites_ctrl.dart';
+import 'package:product_catelog_app/features/product/view/local/favorite_button.dart';
 import 'package:product_catelog_app/main.export.dart';
 
 class ProductCard extends HookConsumerWidget {
@@ -45,16 +45,9 @@ class ProductCard extends HookConsumerWidget {
                 ),
 
                 Positioned(
-                  top: 3,
-                  right: 3,
-                  child: IconButton.filledTonal(
-                    onPressed: onFavTap,
-                    icon: Icon(
-                      isFev ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                      color: context.colors.primary,
-                      size: 20,
-                    ),
-                  ),
+                  top: 8,
+                  right: 8,
+                  child: FavoriteButton(isFav: isFev, onTap: onFavTap),
                 ),
               ],
             ),

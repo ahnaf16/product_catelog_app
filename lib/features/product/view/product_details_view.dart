@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:product_catelog_app/_widgets/u_image.dart';
 import 'package:product_catelog_app/features/favorites/controller/favorites_ctrl.dart';
 import 'package:product_catelog_app/features/product/controller/product_details_ctrl.dart';
+import 'package:product_catelog_app/features/product/view/local/favorite_button.dart';
 import 'package:product_catelog_app/main.export.dart';
 
 class ProductDetailsView extends HookConsumerWidget {
@@ -42,12 +42,8 @@ class ProductDetailsView extends HookConsumerWidget {
                   ),
                 ),
                 actions: [
-                  IconButton(
-                    style: IconButton.styleFrom(foregroundColor: context.colors.primary),
-                    onPressed: () => favCtrl.toggleFavorite(product),
-                    icon: Icon(isFev ? Icons.favorite_rounded : Icons.favorite_border_rounded, size: 20),
-                  ),
-                  const Gap(8),
+                  FavoriteButton(isFav: isFev, onTap: () => favCtrl.toggleFavorite(product)),
+                  const Gap(12),
                 ],
 
                 flexibleSpace: FlexibleSpaceBar(

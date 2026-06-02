@@ -9,7 +9,7 @@ class NavigationRoot extends HookConsumerWidget {
     final rootPath = context.routeState.uri.pathSegments.first;
 
     final Map<RPath, _NavDest> destinations = {
-      RPaths.products: const _NavDest(icon: LIcons.package, text: 'Home'),
+      RPaths.products: const _NavDest(icon: LIcons.shoppingBag, text: 'Home'),
       RPaths.favorites: const _NavDest(icon: LIcons.heart, text: 'Favorites'),
       RPaths.config: const _NavDest(icon: LIcons.cog, text: 'Config'),
     };
