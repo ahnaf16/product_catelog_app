@@ -43,8 +43,6 @@ dev_dependencies:
   hive_ce_generator: ^1.11.0
 
 
-
-
 flutter:
 
   uses-material-design: true

@@ -14,6 +14,8 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'package:product_catelog_app/_core/network/dio_client.dart' as _i1032;
 import 'package:product_catelog_app/features/app_config/repository/app_config_repo.dart'
     as _i609;
+import 'package:product_catelog_app/features/favorites/repository/favorites_repo.dart'
+    as _i891;
 import 'package:product_catelog_app/features/product/repository/product_repo.dart'
     as _i851;
 
@@ -26,6 +28,7 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.singleton<_i1032.DioClient>(() => _i1032.DioClient());
     gh.singleton<_i609.ConfigRepo>(() => _i609.ConfigRepo());
+    gh.singleton<_i891.FavoritesRepo>(() => _i891.FavoritesRepo());
     gh.singleton<_i851.ProductRepo>(() => _i851.ProductRepo());
     return this;
   }

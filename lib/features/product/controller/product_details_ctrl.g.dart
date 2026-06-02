@@ -20,7 +20,7 @@ final class ProductDetailsCtrlProvider
   }) : super(
          retry: null,
          name: r'productDetailsCtrlProvider',
-         isAutoDispose: true,
+         isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
@@ -51,7 +51,7 @@ final class ProductDetailsCtrlProvider
 }
 
 String _$productDetailsCtrlHash() =>
-    r'6f1a67d71130e8d90524a90d3ec8edc37d3ccf55';
+    r'ea34eefb2aeac625d6ee33b8f313087e4c990195';
 
 final class ProductDetailsCtrlFamily extends $Family
     with
@@ -68,7 +68,7 @@ final class ProductDetailsCtrlFamily extends $Family
         name: r'productDetailsCtrlProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
-        isAutoDispose: true,
+        isAutoDispose: false,
       );
 
   ProductDetailsCtrlProvider call(String id) =>

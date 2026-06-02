@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:product_catelog_app/main.export.dart';
 
 extension TextStyleExtensions on TextStyle {
   // Weights
@@ -12,6 +13,8 @@ extension TextStyleExtensions on TextStyle {
   TextStyle get bold => weight(FontWeight.w700);
   TextStyle get extraBold => weight(FontWeight.w800);
   TextStyle get black => weight(FontWeight.w900);
+
+  TextStyle op(double v) => copyWith(color: color?.op(v));
 
   /// Shortcut for italic
   TextStyle get italic => style(FontStyle.italic);

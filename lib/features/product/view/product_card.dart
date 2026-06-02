@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:product_catelog_app/_widgets/u_image.dart';
+import 'package:product_catelog_app/features/favorites/controller/favorites_ctrl.dart';
 import 'package:product_catelog_app/main.export.dart';
 
 class ProductCard extends HookConsumerWidget {
-  const ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product, required this.onFavTap});
   final Product product;
+
+  final Function() onFavTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isFev = ref.watch(isProductFavoriteProvider(product.id.toString())).value ?? false;
+
     return GestureDetector(
       onTap: () => RPaths.productDetails(product.id.toString()).push(context),
       child: Container(
@@ -33,7 +38,7 @@ class ProductCard extends HookConsumerWidget {
                       height: 200,
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
-                      backgroundColor: context.colors.onPrimary,
+                      backgroundColor: context.colors.onPrimary.op(context.isDark ? .4 : 1),
                       borderRadius: 26,
                     ),
                   ),
@@ -43,8 +48,12 @@ class ProductCard extends HookConsumerWidget {
                   top: 3,
                   right: 3,
                   child: IconButton.filledTonal(
-                    onPressed: () {},
-                    icon: Icon(Icons.favorite_border, color: context.colors.primary, size: 20),
+                    onPressed: onFavTap,
+                    icon: Icon(
+                      isFev ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                      color: context.colors.primary,
+                      size: 20,
+                    ),
                   ),
                 ),
               ],

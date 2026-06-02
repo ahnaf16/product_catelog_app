@@ -20,7 +20,7 @@ final class ProductCtrlProvider
         argument: null,
         retry: null,
         name: r'productCtrlProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -33,7 +33,7 @@ final class ProductCtrlProvider
   ProductCtrl create() => ProductCtrl();
 }
 
-String _$productCtrlHash() => r'7a2d5e0c8ad8aa0214a2096425856be8e951aa13';
+String _$productCtrlHash() => r'9db68ac8a5b57878ae0008840f7483e7204d196f';
 
 abstract class _$ProductCtrl extends $AsyncNotifier<List<Product>> {
   FutureOr<List<Product>> build();

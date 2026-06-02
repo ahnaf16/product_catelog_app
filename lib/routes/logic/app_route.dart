@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:product_catelog_app/_core/helper_types.dart.dart';
 import 'package:product_catelog_app/main.export.dart';
 
 class AppRoute extends GoRoute {

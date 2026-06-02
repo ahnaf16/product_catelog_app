@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'product_details_ctrl.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ProductDetailsCtrl extends _$ProductDetailsCtrl {
   final _repo = locate<ProductRepo>();
   @override
